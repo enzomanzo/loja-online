@@ -6,6 +6,7 @@ import br.com.fiap.appprodutoteste.produto.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -32,6 +33,20 @@ public class ProdutoController {
         return modelView;
     }
 
+    @GetMapping("/produtos/criar")
+    public ModelAndView criar(){
+        ModelAndView modelView = new ModelAndView("produtos/criar");
+
+        return modelView;
+    }
+
+    @PostMapping("produtos")
+    public String salvar(Produto produto){
+
+        produtoRepository.save(produto);
+
+        return"redirect:/produtos";
+    }
 
 
 }
