@@ -21,8 +21,6 @@ public class ProdutoDto {
     @NotNull
     @DecimalMin(value = "0.00")
     private BigDecimal valor;
-    @NotNull
-    @NotBlank
     private Integer quantidade;
 
 

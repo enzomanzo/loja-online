@@ -28,6 +28,8 @@ public class ProdutoController {
     @GetMapping("/produtos")
     public ModelAndView index() {
         ModelAndView modelView = new ModelAndView("produtos/index");
+
+
         List<Produto> produtoDaRepository = produtoRepository.findAll();
         modelView.addObject("listarProdutos", produtoDaRepository);
 
@@ -35,21 +37,19 @@ public class ProdutoController {
     }
 
     @GetMapping("/produtos/criar")
-    public ModelAndView criar(ProdutoDto model) {
+    public ModelAndView criar(ProdutoDto produto) {
         ModelAndView modelView = new ModelAndView("produtos/criar");
-
         return modelView;
     }
 
     @PostMapping("produtos")
-    public ModelAndView salvar(@Valid ProdutoDto model, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
+    public ModelAndView salvar(@Valid ProdutoDto produto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
             return new ModelAndView("produtos/criar");
         }
-        Produto produtoEntity = modelMapper.map(model, Produto.class);
-        produtoRepository.save(produtoEntity);
 
+        Produto produtoEntity = modelMapper.map(produto, Produto.class);
+        produtoRepository.save(produtoEntity);
         return new ModelAndView("redirect:/produtos");
     }
 

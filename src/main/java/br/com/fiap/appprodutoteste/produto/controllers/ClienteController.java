@@ -6,10 +6,12 @@ import br.com.fiap.appprodutoteste.produto.repositories.ClienteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -32,17 +34,21 @@ public class ClienteController {
     }
 
     @GetMapping("/clientes/criar")
-    public ModelAndView criar() {
+    public ModelAndView criar(ClienteDto model) {
 
         return new ModelAndView("clientes/criar");
     }
 
     @PostMapping("clientes")
-    public String salvar(ClienteDto model) {
-        Cliente clienteEntity = modelMapper.map(model, Cliente.class); //mapeia o model para o cliente
+    public ModelAndView salvar(@Valid ClienteDto model, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            ModelAndView mv = new ModelAndView("clientes/criar");
+            return mv;
+        }
 
+        Cliente clienteEntity = modelMapper.map(model, Cliente.class); //mapeia o model para o cliente
         clienteRepository.save(clienteEntity); //salva o cliente
 
-        return "redirect:/clientes";
+        return new ModelAndView("redirect:/clientes"); //redireciona para a lista de clientes
     }
 }
